@@ -1,0 +1,2 @@
+# Aggregate requirements so IDEs such as PyCharm can auto-detect project dependencies.
+-r backend/requirements.txt

@@ -1,0 +1,242 @@
+:root {
+  color-scheme: dark;
+  --bg: #0a0f1c;
+  --card: rgba(13, 25, 48, 0.85);
+  --card-border: rgba(48, 227, 202, 0.25);
+  --text: #e4f4ff;
+  --muted: rgba(228, 244, 255, 0.65);
+  --accent: #30e3ca;
+  --accent-strong: #15c9b0;
+  --danger: #f87171;
+  --warning: #facc15;
+  --info: #60a5fa;
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 20% 20%, rgba(48, 227, 202, 0.2), transparent 60%),
+    radial-gradient(circle at 80% 0%, rgba(96, 165, 250, 0.25), transparent 55%),
+    var(--bg);
+  color: var(--text);
+  padding: 32px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  margin: 0 0 8px;
+  font-size: 32px;
+  letter-spacing: 1px;
+}
+
+.page-header p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.return-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(48, 227, 202, 0.5);
+  text-decoration: none;
+  color: var(--accent);
+  font-weight: 600;
+  backdrop-filter: blur(6px);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.return-link:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 12px 40px rgba(12, 20, 34, 0.35);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  backdrop-filter: blur(12px);
+}
+
+.card header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.card header p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.table-wrapper {
+  max-height: 220px;
+  overflow: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(48, 227, 202, 0.12);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+thead {
+  background: rgba(48, 227, 202, 0.08);
+  position: sticky;
+  top: 0;
+}
+
+thead th {
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+tbody td {
+  padding: 10px 12px;
+  border-top: 1px solid rgba(48, 227, 202, 0.12);
+  color: var(--muted);
+}
+
+tbody tr:hover {
+  background: rgba(21, 201, 176, 0.08);
+}
+
+tbody .empty {
+  text-align: center;
+  font-style: italic;
+  color: rgba(228, 244, 255, 0.45);
+}
+
+code {
+  background: rgba(9, 17, 32, 0.9);
+  padding: 4px 6px;
+  border-radius: 6px;
+  display: inline-block;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.message {
+  max-width: 240px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  align-items: end;
+}
+
+.form-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(48, 227, 202, 0.2);
+  background: rgba(6, 10, 20, 0.9);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.form-grid textarea {
+  resize: vertical;
+}
+
+.form-grid button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: #001217;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-grid button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(48, 227, 202, 0.35);
+}
+
+.full-row {
+  grid-column: 1 / -1;
+}
+
+.toast-area {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.toast {
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid transparent;
+  backdrop-filter: blur(8px);
+}
+
+.toast.success {
+  background: rgba(21, 201, 176, 0.12);
+  border-color: rgba(48, 227, 202, 0.4);
+  color: var(--accent);
+}
+
+.toast.error {
+  background: rgba(248, 113, 113, 0.1);
+  border-color: rgba(248, 113, 113, 0.35);
+  color: var(--danger);
+}
+
+@media (max-width: 768px) {
+  body {
+    padding: 20px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

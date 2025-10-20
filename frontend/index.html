@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>麻醉生命体征预警系统</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/roboto-mono@5/index.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">Anesthesia Guardian</div>
+      <div class="status-indicator" id="connection-status">未连接</div>
+    </header>
+    <main class="dashboard">
+      <section class="control-panel">
+        <h2>手术间选择</h2>
+        <select id="or-select"></select>
+        <button id="connect-btn">开始监测</button>
+        <div class="session-info" id="session-info"></div>
+        <div class="config-links">
+          <a href="#" id="manage-alerts">配置预警</a>
+          <a href="#" id="manage-patients">患者资料</a>
+        </div>
+      </section>
+      <section class="vitals-panel">
+        <h2>实时参数</h2>
+        <div class="vitals-grid" id="vitals-grid"></div>
+      </section>
+      <section class="alerts-panel">
+        <h2>预警记录</h2>
+        <ul id="alerts-list"></ul>
+      </section>
+    </main>
+    <template id="vital-card-template">
+      <div class="vital-card">
+        <div class="vital-name"></div>
+        <div class="vital-value"></div>
+        <div class="vital-unit"></div>
+      </div>
+    </template>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>生命体征预警后台管理</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}" />
+  </head>
+  <body>
+    <header class="page-header">
+      <div>
+        <h1>生命体征预警后台管理</h1>
+        <p>集中管理手术间、设备接口、监测参数与预警规则。</p>
+      </div>
+      <a class="return-link" href="/">返回监测大屏</a>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <section class="toast-area">
+          {% for category, message in messages %}
+            <div class="toast {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </section>
+      {% endif %}
+    {% endwith %}
+
+    <main class="grid">
+      <section class="card">
+        <header>
+          <h2>手术间</h2>
+          <p>创建或说明手术间的用途，以便前端快速定位。</p>
+        </header>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>名称</th>
+                <th>描述</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for room in rooms %}
+                <tr>
+                  <td>{{ room.id }}</td>
+                  <td>{{ room.name }}</td>
+                  <td>{{ room.description or "-" }}</td>
+                </tr>
+              {% else %}
+                <tr>
+                  <td colspan="3" class="empty">暂无记录</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <form method="post" class="form-grid">
+          <input type="hidden" name="entity" value="operating_room" />
+          <label>
+            名称
+            <input type="text" name="name" required placeholder="示例：手术间 A" />
+          </label>
+          <label class="full-row">
+            描述
+            <textarea name="description" rows="2" placeholder="可选：备注环境、主要设备等"></textarea>
+          </label>
+          <button type="submit">新增手术间</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <header>
+          <h2>设备接口</h2>
+          <p>配置接入的监护仪、注射泵或麻醉机连接信息。</p>
+        </header>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>名称</th>
+                <th>类型</th>
+                <th>所属手术间</th>
+                <th>连接配置</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for device in devices %}
+                <tr>
+                  <td>{{ device.id }}</td>
+                  <td>{{ device.name }}</td>
+                  <td>{{ device.device_type }}</td>
+                  <td>{{ device.operating_room.name if device.operating_room else '-' }}</td>
+                  <td><code>{{ device.connection_info }}</code></td>
+                </tr>
+              {% else %}
+                <tr>
+                  <td colspan="5" class="empty">暂无记录</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <form method="post" class="form-grid">
+          <input type="hidden" name="entity" value="device" />
+          <label>
+            名称
+            <input type="text" name="name" required placeholder="示例：迈瑞监护仪" />
+          </label>
+          <label>
+            类型
+            <input type="text" name="device_type" required placeholder="monitor / pump / ventilator" />
+          </label>
+          <label>
+            所属手术间
+            <select name="operating_room_id" required>
+              <option value="" disabled selected>请选择</option>
+              {% for room in rooms %}
+                <option value="{{ room.id }}">{{ room.name }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <label class="full-row">
+            连接配置
+            <textarea name="connection_info" rows="3" required placeholder='示例：{"host": "10.0.0.12", "port": 502}'></textarea>
+          </label>
+          <button type="submit">新增设备接口</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <header>
+          <h2>监测参数</h2>
+          <p>维护前端展示与 Dify 入参需要的参数清单。</p>
+        </header>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>参数名</th>
+                <th>单位</th>
+                <th>映射字段</th>
+                <th>来源设备</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for parameter in parameters %}
+                <tr>
+                  <td>{{ parameter.id }}</td>
+                  <td>{{ parameter.name }}</td>
+                  <td>{{ parameter.unit or '-' }}</td>
+                  <td>{{ parameter.dify_field or '-' }}</td>
+                  <td>{{ parameter.device.name if parameter.device else '-' }}</td>
+                </tr>
+              {% else %}
+                <tr>
+                  <td colspan="5" class="empty">暂无记录</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <form method="post" class="form-grid">
+          <input type="hidden" name="entity" value="parameter" />
+          <label>
+            参数名
+            <input type="text" name="name" required placeholder="示例：心率" />
+          </label>
+          <label>
+            单位
+            <input type="text" name="unit" placeholder="bpm / mmHg / %" />
+          </label>
+          <label>
+            来源设备
+            <select name="device_id" required>
+              <option value="" disabled selected>请选择</option>
+              {% for device in devices %}
+                <option value="{{ device.id }}">{{ device.name }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <label>
+            Dify 字段
+            <input type="text" name="dify_field" placeholder="示例：heart_rate" />
+          </label>
+          <button type="submit">新增监测参数</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <header>
+          <h2>预警规则</h2>
+          <p>配置阈值、严重等级及推送 Dify 的提示模板。</p>
+        </header>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>监测参数</th>
+                <th>下限</th>
+                <th>上限</th>
+                <th>严重级别</th>
+                <th>消息模板</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for rule in alert_rules %}
+                <tr>
+                  <td>{{ rule.id }}</td>
+                  <td>{{ rule.parameter.name if rule.parameter else '-' }}</td>
+                  <td>{{ rule.lower_bound if rule.lower_bound is not none else '-' }}</td>
+                  <td>{{ rule.upper_bound if rule.upper_bound is not none else '-' }}</td>
+                  <td>{{ rule.severity }}</td>
+                  <td class="message">{{ rule.message_template or '-' }}</td>
+                </tr>
+              {% else %}
+                <tr>
+                  <td colspan="6" class="empty">暂无记录</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <form method="post" class="form-grid">
+          <input type="hidden" name="entity" value="alert_rule" />
+          <label>
+            监测参数
+            <select name="parameter_id" required>
+              <option value="" disabled selected>请选择</option>
+              {% for parameter in parameters %}
+                <option value="{{ parameter.id }}">{{ parameter.name }}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <label>
+            下限
+            <input type="number" step="any" name="lower_bound" placeholder="可选" />
+          </label>
+          <label>
+            上限
+            <input type="number" step="any" name="upper_bound" placeholder="可选" />
+          </label>
+          <label>
+            严重级别
+            <select name="severity">
+              <option value="info">信息</option>
+              <option value="warning" selected>警告</option>
+              <option value="critical">严重</option>
+            </select>
+          </label>
+          <label class="full-row">
+            消息模板
+            <textarea name="message_template" rows="3" placeholder="例如：{name} 当前值 {value}{unit}，请检查患者状态"></textarea>
+          </label>
+          <button type="submit">新增预警规则</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>
