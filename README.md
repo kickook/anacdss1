@@ -134,8 +134,10 @@
 - `POST /api/rooms/<room_id>/devices`：为手术间接入设备。
 - `POST /api/devices/<device_id>/parameters`：注册监测参数。
 - `POST /api/parameters/<parameter_id>/threshold`：配置阈值。
+- `POST /api/patients`：创建患者档案。
 - `POST /api/sessions`：启动监测会话。
 - `POST /api/sessions/<session_id>/ingest`：写入实时参数并自动触发预警。
+- `GET /api/alerts`：查看最新预警列表。
 
 详细请求/响应示例可参考 `wxcloudrun/views.py` 中的注释实现。
 
