@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>麻醉生命体征智能预警平台</title>
+  <style>
+    body {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      margin: 0;
+      background: #0c1c2c;
+      color: #e6f0ff;
+    }
+    header {
+      padding: 24px 32px;
+      background: #102840;
+      border-bottom: 1px solid #1b3957;
+    }
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 24px;
+    }
+    main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      padding: 24px 32px;
+    }
+    section {
+      background: #132b44;
+      padding: 16px 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    }
+    h2 {
+      font-size: 18px;
+      margin-top: 0;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    li {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .empty {
+      color: #8fb0d6;
+      font-size: 14px;
+    }
+    .alert {
+      color: #ffb3b3;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>麻醉生命体征智能预警平台</h1>
+    <p>全流程麻醉安全协同系统 · 多手术间数据汇聚 · 智能预警</p>
+  </header>
+  <main>
+    <section>
+      <h2>当前手术间</h2>
+      <ul>
+        {% if rooms %}
+          {% for room in rooms %}
+            <li>{{ room.name }}{% if room.location %} · {{ room.location }}{% endif %}</li>
+          {% endfor %}
+        {% else %}
+          <li class="empty">暂无手术间，请通过 API 创建。</li>
+        {% endif %}
+      </ul>
+    </section>
+    <section>
+      <h2>最新预警</h2>
+      <ul>
+        {% if alerts %}
+          {% for alert in alerts %}
+            <li class="alert">{{ alert.message }} · {{ alert.created_at.strftime('%H:%M:%S') }}</li>
+          {% endfor %}
+        {% else %}
+          <li class="empty">暂无预警。</li>
+        {% endif %}
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
